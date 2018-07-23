@@ -1,12 +1,12 @@
 {
   "name": "vue-highlight-words",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue component to highlight words within a larger body of text",
   "sideEffects": [
     "*.css",
     "src/App.vue"
   ],
-  "main": "dist/vue-hightlight-words.common.js",
+  "main": "dist/vue-highlight-words.common.js",
   "files": [
     "dist"
   ],
