@@ -1,20 +1,47 @@
 {
   "name": "vue-highlight-words",
   "version": "0.1.0",
-  "private": true,
+  "description": "Vue component to highlight words within a larger body of text",
+  "sideEffects": false,
+  "main": "dist/vue-hightlight-words.common.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "npm run build:demo && npm run build:dist",
+    "build:demo": "vue-cli-service build --dest demo",
+    "build:dist": "vue-cli-service build --target lib src/components/HighlightWords.js",
+    "lint": "vue-cli-service lint",
+    "deploy": "gh-pages -d demo",
+    "prebuild": "npm run lint",
+    "postpublish": "npm run deploy",
+    "prepublish": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Astray-git/vue-highlight-words.git"
+  },
+  "keywords": [
+    "vue",
+    "highlight"
+  ],
+  "author": "Yichang Liu",
+  "license": "MIT",
+  "homepage": "https://github.com/Astray-git/vue-highlight-words#readme",
   "dependencies": {
-    "vue": "^2.5.16"
+    "highlight-words-core": "^1.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.5",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
     "@vue/cli-service": "^3.0.0-rc.5",
     "@vue/eslint-config-prettier": "^3.0.0-rc.5",
+    "gh-pages": "^1.2.0",
+    "vue": "^2.5.16",
     "vue-template-compiler": "^2.5.16"
+  },
+  "peerDependencies": {
+    "vue": "^2.3.0"
   }
 }
