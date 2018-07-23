@@ -4,6 +4,8 @@
 >
 > Vue component to highlight words within a larger body of text.
 
+[demo](https://astray-git.github.io/vue-highlight-words/)
+
 ## Usage
 
 To use it, just provide it with an array of search terms and a body of text to highlight.
@@ -69,7 +71,7 @@ And the `Highlighter` will mark all occurrences of search terms within the text:
 ## Installation
 
 ```
-npm i --save react-highlight-words
+npm i --save vue-highlight-words
 ```
 
 ## Project setup
