@@ -134,7 +134,6 @@ var dist = __webpack_require__("5V/u");
     activeIndex: Number,
     activeStyle: Object,
     autoEscape: Boolean,
-    className: String,
     findChunks: Function,
     highlightClassName: String,
     highlightStyle: Object,
@@ -167,7 +166,6 @@ var dist = __webpack_require__("5V/u");
         autoEscape = _context$props.autoEscape,
         _context$props$caseSe = _context$props.caseSensitive,
         caseSensitive = _context$props$caseSe === void 0 ? false : _context$props$caseSe,
-        className = _context$props.className,
         findChunks = _context$props.findChunks,
         _context$props$highli = _context$props.highlightClassName,
         highlightClassName = _context$props$highli === void 0 ? '' : _context$props$highli,
@@ -181,6 +179,7 @@ var dist = __webpack_require__("5V/u");
         _context$props$unhigh = _context$props.unhighlightClassName,
         unhighlightClassName = _context$props$unhigh === void 0 ? '' : _context$props$unhigh,
         unhighlightStyle = _context$props.unhighlightStyle;
+    var contextData = context.data;
     var chunks = Object(dist["findAll"])({
       autoEscape: autoEscape,
       caseSensitive: caseSensitive,
@@ -193,11 +192,7 @@ var dist = __webpack_require__("5V/u");
     var highlightCount = -1;
     var highlightClassNames = '';
     var highlightStyles;
-    return h("span", {
-      attrs: {
-        className: className
-      }
-    }, [chunks.map(function (chunk, index) {
+    return h("span", contextData, [chunks.map(function (chunk, index) {
       var text = textToHighlight.substr(chunk.start, chunk.end - chunk.start);
 
       if (chunk.highlight) {
@@ -212,9 +207,7 @@ var dist = __webpack_require__("5V/u");
         }, [text]);
       } else {
         return h("span", {
-          attrs: {
-            className: unhighlightClassName
-          },
+          "class": unhighlightClassName,
           key: index,
           style: unhighlightStyle
         }, [text]);
