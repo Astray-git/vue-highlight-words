@@ -6,6 +6,9 @@
 
 [demo](https://astray-git.github.io/vue-highlight-words/)
 
+## Why?
+It uses `render` to handle the highlighted text instead of using `v-html` or `el.innerHtml`.
+
 ## Usage
 
 To use it, just provide it with an array of search terms and a body of text to highlight.
@@ -13,7 +16,9 @@ To use it, just provide it with an array of search terms and a body of text to h
 ```html
 <template>
   <div id="app">
-    <Highlighter highlightClassName="highlight"
+    // attrs on component are applied to the wrapper `<span>`
+    <Highlighter class="my-highlight" :style="{ color: 'red' }"
+      highlightClassName="highlight"
       :searchWords="keywords"
       :autoEscape="true"
       :textToHighlight="text"/>
@@ -55,7 +60,6 @@ And the `Highlighter` will mark all occurrences of search terms within the text:
 | activeIndex          | String        |           | Specify the match index that should be actively highlighted. Use along with `activeClassName`                                                                                                                                                                                                                                                                      |
 | activeStyle          | Object        |           | The inline style to be applied to an active match. Use along with `activeIndex`                                                                                                                                                                                                                                                                                    |
 | autoEscape           | Boolean       |           | Escape characters in `searchWords` which are meaningful in regular expressions                                                                                                                                                                                                                                                                                     |
-| className            | String        |           | CSS class name applied to the outer/wrapper `<span>`                                                                                                                                                                                                                                                                                                               |
 | caseSensitive        | Boolean       |           | Search should be case sensitive; defaults to `false`                                                                                                                                                                                                                                                                                                               |
 | findChunks           | Function      |           | Use a custom function to search for matching chunks. This makes it possible to use arbitrary logic when looking for matches. See the default `findChunks` function in [highlight-words-core](https://github.com/bvaughn/highlight-words-core) for signature. Have a look at the [custom findChunks example](https://codesandbox.io/s/k20x3ox31o) on how to use it. |
 | highlightClassName   | String        |           | CSS class name applied to highlighted text                                                                                                                                                                                                                                                                                                                         |
