@@ -11,7 +11,8 @@
     </div>
     <div class="output">
       <h3>Output:</h3>
-      <HighlightWords highlightClassName="highlight"
+      <HighlightWords class="wrapper"
+        highlightClassName="highlight"
         highlightTag="i"
         :searchWords="keywords"
         :autoEscape="true"

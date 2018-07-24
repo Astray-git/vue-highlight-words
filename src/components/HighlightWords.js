@@ -7,7 +7,6 @@ export default {
     activeIndex: Number,
     activeStyle: Object,
     autoEscape: Boolean,
-    className: String,
     findChunks: Function,
     highlightClassName: String,
     highlightStyle: Object,
@@ -34,7 +33,6 @@ export default {
       activeStyle,
       autoEscape,
       caseSensitive = false,
-      className,
       findChunks,
       highlightClassName = '',
       highlightStyle = {},
@@ -45,6 +43,8 @@ export default {
       unhighlightClassName = '',
       unhighlightStyle
     } = context.props
+
+    const contextData = context.data
 
     const chunks = findAll({
       autoEscape,
@@ -61,7 +61,7 @@ export default {
     let highlightStyles
 
     return (
-      <span className={className}>
+      <span {...contextData}>
         {chunks.map((chunk, index) => {
           const text = textToHighlight.substr(
             chunk.start,
@@ -93,7 +93,7 @@ export default {
           } else {
             return (
               <span
-                className={unhighlightClassName}
+                class={unhighlightClassName}
                 key={index}
                 style={unhighlightStyle}
               >
