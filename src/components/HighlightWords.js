@@ -10,7 +10,7 @@ export default {
     findChunks: Function,
     highlightClassName: String,
     highlightStyle: Object,
-    highlightTag: [Node, Function, String],
+    highlightTag: [Object, Function, String],
     sanitize: Function,
     searchWords: {
       type: Array, // Array<string>
@@ -81,15 +81,29 @@ export default {
                 ? Object.assign({}, highlightStyle, activeStyle)
                 : highlightStyle
 
-            return (
-              <HighlightTag
-                class={highlightClassNames}
-                key={index}
-                style={highlightStyles}
-              >
-                {text}
-              </HighlightTag>
-            )
+            const data = {
+              class: highlightClassNames,
+              key: index,
+              style: highlightStyles
+            }
+
+            if (typeof HighlightTag === 'string') {
+              return <HighlightTag {...data}>{text}</HighlightTag>
+            }
+
+            if (contextData.scopedSlots) {
+              return h(HighlightTag, data, [
+                contextData.scopedSlots.default({
+                  children: text,
+                  highlightIndex: highlightCount
+                })
+              ])
+            }
+
+            data.props = {
+              highlightIndex: highlightCount
+            }
+            return h(HighlightTag, data, text)
           } else {
             return (
               <span
