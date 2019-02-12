@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import HighlightWords from './components/HighlightWords'
+import HighlightWords from 'vue-highlight-words'
 import StrongProps from './components/StrongProps'
 import StrongSlot from './components/StrongSlot'
 
