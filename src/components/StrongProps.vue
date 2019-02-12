@@ -1,6 +1,6 @@
 <template>
   <strong>
-    <small>[{{highlightIndex}}]:</small>
+    <small>[{{ highlightIndex }}]:</small>
     <slot></slot>
   </strong>
 </template>

@@ -3,7 +3,7 @@
     <h1>vue highlight words</h1>
     <div>
       <h3>Keywords:</h3>
-      <input type="text" v-model="words">
+      <input type="text" v-model="words" />
     </div>
     <div>
       <h3>Text:</h3>
@@ -47,9 +47,9 @@
         :autoEscape="true"
         :textToHighlight="text"
       >
-        <span slot-scope="{highlightIndex, children}">
-          <small>[{{highlightIndex}}]:</small>
-          {{children}}
+        <span slot-scope="{ highlightIndex, children }">
+          <small>[{{ highlightIndex }}]:</small>
+          {{ children }}
         </span>
       </HighlightWords>
     </div>
@@ -59,7 +59,7 @@
         style="position: absolute; top: 0; right: 0; border: 0;"
         src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
         alt="Fork me on GitHub"
-      >
+      />
     </a>
   </div>
 </template>
