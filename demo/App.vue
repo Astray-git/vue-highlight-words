@@ -12,8 +12,8 @@
     <div class="output">
       <h3>Output:</h3>
       <h4>
-        basic "&lt;i&gt;"
-        <code>highlightTag</code>
+        plain html
+        <code>&lt;i&gt;</code>
       </h4>
       <HighlightWords
         class="wrapper"
@@ -23,6 +23,7 @@
         :autoEscape="true"
         :textToHighlight="text"
       ></HighlightWords>
+
       <h4>
         component
         <code>highlightTag</code>
@@ -35,9 +36,11 @@
         :autoEscape="true"
         :textToHighlight="text"
       ></HighlightWords>
+
       <h4>
         component
-        <code>highlightTag</code> with scoped slot
+        <code>highlightTag</code> with
+        <code>slot-scope</code>
       </h4>
       <HighlightWords
         class="wrapper"
@@ -51,6 +54,20 @@
           <small>[{{ highlightIndex }}]:</small>
           {{ children }}
         </span>
+      </HighlightWords>
+
+      <h4><code>&lt;strong&gt;</code> tag with 2.6.0+ scoped slot</h4>
+      <HighlightWords
+        class="wrapper"
+        highlightClassName="highlight"
+        highlightTag="strong"
+        :searchWords="keywords"
+        :autoEscape="true"
+        :textToHighlight="text"
+        v-slot="{ highlightIndex, children }"
+      >
+        <small>[{{ highlightIndex }}]:</small>
+        {{ children }}
       </HighlightWords>
     </div>
 
