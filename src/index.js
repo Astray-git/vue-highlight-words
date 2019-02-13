@@ -88,8 +88,11 @@ export default {
             style: highlightStyles
           }
 
-          if (typeof HighlightTag === 'string') {
-            return h(HighlightTag, { ...data }, text)
+          if (typeof HighlightTag !== 'string') {
+            // not plain html tag, add props for compoent
+            data.props = {
+              highlightIndex: highlightCount
+            }
           }
 
           if (contextData.scopedSlots) {
@@ -101,9 +104,6 @@ export default {
             ])
           }
 
-          data.props = {
-            highlightIndex: highlightCount
-          }
           return h(HighlightTag, data, text)
         } else {
           return h(
