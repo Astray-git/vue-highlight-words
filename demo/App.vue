@@ -3,7 +3,7 @@
     <h1>vue highlight words</h1>
     <div>
       <h3>Keywords:</h3>
-      <input type="text" v-model="words">
+      <input type="text" v-model="words" />
     </div>
     <div>
       <h3>Text:</h3>
@@ -12,8 +12,8 @@
     <div class="output">
       <h3>Output:</h3>
       <h4>
-        basic "&lt;i&gt;"
-        <code>highlightTag</code>
+        plain html
+        <code>&lt;i&gt;</code>
       </h4>
       <HighlightWords
         class="wrapper"
@@ -23,6 +23,7 @@
         :autoEscape="true"
         :textToHighlight="text"
       ></HighlightWords>
+
       <h4>
         component
         <code>highlightTag</code>
@@ -35,9 +36,11 @@
         :autoEscape="true"
         :textToHighlight="text"
       ></HighlightWords>
+
       <h4>
         component
-        <code>highlightTag</code> with scoped slot
+        <code>highlightTag</code> with
+        <code>slot-scope</code>
       </h4>
       <HighlightWords
         class="wrapper"
@@ -47,10 +50,24 @@
         :autoEscape="true"
         :textToHighlight="text"
       >
-        <span slot-scope="{highlightIndex, children}">
-          <small>[{{highlightIndex}}]:</small>
-          {{children}}
+        <span slot-scope="{ highlightIndex, children }">
+          <small>[{{ highlightIndex }}]:</small>
+          {{ children }}
         </span>
+      </HighlightWords>
+
+      <h4><code>&lt;strong&gt;</code> tag with 2.6.0+ scoped slot</h4>
+      <HighlightWords
+        class="wrapper"
+        highlightClassName="highlight"
+        highlightTag="strong"
+        :searchWords="keywords"
+        :autoEscape="true"
+        :textToHighlight="text"
+        v-slot="{ highlightIndex, children }"
+      >
+        <small>[{{ highlightIndex }}]:</small>
+        {{ children }}
       </HighlightWords>
     </div>
 
@@ -59,13 +76,13 @@
         style="position: absolute; top: 0; right: 0; border: 0;"
         src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
         alt="Fork me on GitHub"
-      >
+      />
     </a>
   </div>
 </template>
 
 <script>
-import HighlightWords from './components/HighlightWords'
+import HighlightWords from 'vue-highlight-words'
 import StrongProps from './components/StrongProps'
 import StrongSlot from './components/StrongSlot'
 

@@ -10,11 +10,7 @@
  *
 */
 
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var highlightWordsCore = require('highlight-words-core');
+import { findAll } from 'highlight-words-core';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -103,7 +99,7 @@ var index = {
         unhighlightClassName = _context$props$unhigh === void 0 ? '' : _context$props$unhigh,
         unhighlightStyle = _context$props.unhighlightStyle;
     var contextData = context.data;
-    var chunks = highlightWordsCore.findAll({
+    var chunks = findAll({
       autoEscape: autoEscape,
       caseSensitive: caseSensitive,
       findChunks: findChunks,
@@ -155,5 +151,5 @@ var index = {
   }
 };
 
-exports.default = index;
-//# sourceMappingURL=vue-highlight-words.common.js.map
+export default index;
+//# sourceMappingURL=vue-highlight-words.esm.js.map

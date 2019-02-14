@@ -64,7 +64,7 @@ And the `Highlighter` will mark all occurrences of search terms within the text:
 | Property             | Type                | Required? | Description                                                                                                                                                                                                                                                                                                                                                        |
 | :------------------- | :------------------ | :-------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | activeClassName      | String              |           | The class name to be applied to an active match. Use along with `activeIndex`                                                                                                                                                                                                                                                                                      |
-| activeIndex          | String              |           | Specify the match index that should be actively highlighted. Use along with `activeClassName`                                                                                                                                                                                                                                                                      |
+| activeIndex          | Number              |           | Specify the match index that should be actively highlighted. Use along with `activeClassName`                                                                                                                                                                                                                                                                      |
 | activeStyle          | Object              |           | The inline style to be applied to an active match. Use along with `activeIndex`                                                                                                                                                                                                                                                                                    |
 | autoEscape           | Boolean             |           | Escape characters in `searchWords` which are meaningful in regular expressions                                                                                                                                                                                                                                                                                     |
 | caseSensitive        | Boolean             |           | Search should be case sensitive; defaults to `false`                                                                                                                                                                                                                                                                                                               |
@@ -106,7 +106,7 @@ You can custom the highlight tag by providing a compoent to the `highlightTag` p
   import Highlighter from 'vue-highlight-words'
 
 + const Highlight = {
-+   template: '<strong><slot></slot> ({{highlightIndex}}) </strong>',
++   template: '<strong><slot></slot> ({{ highlightIndex }}) </strong>',
 +   props: ['highlightIndex']
 + }
 
@@ -140,7 +140,58 @@ or use scoped slot:
 | default | slot with prop `highlightIndex` and `children` | Matched text   |
 
 <details>
-<summary>Scoped slot example: </summary>
+<summary>2.6.0+ scoped slot example: </summary>
+
+```diff
+  <template>
+    <div id="app">
+      // attrs on component are applied to the wrapper `<span>`
+      <Highlighter class="my-highlight" :style="{ color: 'red' }"
+        highlightClassName="highlight"
++       highlightTag="strong"
+        :searchWords="keywords"
+        :autoEscape="true"
+-       :textToHighlight="text"/>
++       :textToHighlight="text"
++       v-slot="{ highlightIndex, children }">
++       {{children}} ({{highlightIndex}})
++     </Highlighter>
+    </div>
+  </template>
+
+  <script>
+  import Highlighter from 'vue-highlight-words'
+
++ const Highlight = {
++   template: '<strong><slot></slot></strong>',
++ }
+
+  export default {
+    name: 'app',
+    components: {
+      Highlighter
+    },
+    data() {
+      return {
+        text: 'The dog is chasing the cat. Or perhaps they\'re just playing?',
+        words: 'and or the'，
++       tag: Highlight
+      }
+    },
+    computed: {
+      keywords() {
+        return this.words.split(' ')
+      }
+    }
+  }
+  </script>
+```
+
+</details>
+
+
+<details>
+<summary>Deprecated <code>slot-scope</code> example: </summary>
 
 ```diff
   <template>
@@ -153,7 +204,7 @@ or use scoped slot:
         :autoEscape="true"
 -       :textToHighlight="text"/>
 +       :textToHighlight="text">
-+        <span slot-scope="{highlightIndex, children}">
++       <span slot-scope="{ highlightIndex, children }">
 +         {{children}} ({{highlightIndex}})
 +       </span>
 +     </Highlighter>
