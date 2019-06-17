@@ -7,12 +7,17 @@ const analyzer = require('rollup-plugin-analyzer').plugin
 const merge = require('merge')
 const clone = require('clone-deep')
 const chalk = require('chalk')
+const replace = require('rollup-plugin-replace')
 const rimraf = require('rimraf')
 const terser = require('rollup-plugin-terser').terser
 const { name, main, module: moduleField } = require('../package.json')
 const config = require('./rollup.config')
 
 const plugins = [
+  replace({
+    'process.env.ROLLUP_BUILD_MODE': () =>
+      JSON.stringify(process.env.ROLLUP_BUILD_MODE)
+  }),
   babel({
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.es6', '.es', '.mjs'],
     runtimeHelpers: true
@@ -23,14 +28,18 @@ const plugins = [
   })
 ]
 
+const [replacePlugin, ...otherPlugins] = plugins
+
 const umdPlugins = [
+  replacePlugin,
   resolve(),
   commonjs({
     namedExports: {
       'node_modules/highlight-words-core/dist/index.js': ['findAll']
     }
-  })
-].concat(plugins)
+  }),
+  ...otherPlugins
+]
 
 const filename = str => path.join(__dirname, '../', str)
 const builds = {
@@ -94,6 +103,9 @@ const buildPromise = Object.keys(builds).reduce((promise, key) => {
     `)
 
   const bundlePromise = promise.then(() => {
+    const subIndex = key.indexOf('_')
+    process.env.ROLLUP_BUILD_MODE =
+      subIndex > -1 ? key.substring(0, subIndex) : key
     return rollup.rollup(mergedConfig.input).catch(logErr)
   })
   const writePromise = bundlePromise.then(bundle => {
