@@ -2,7 +2,7 @@
 /*!
  * vue-highlight-words © Yichang Liu, 2019
  *
- * Version: 1.0.0
+ * Version: 1.2.0
  *
  * LICENCE: MIT
  *
