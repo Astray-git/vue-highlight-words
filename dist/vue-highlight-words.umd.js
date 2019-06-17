@@ -393,7 +393,7 @@
   unwrapExports(dist);
   var dist_1 = dist.findAll;
 
-  var index$1 = {
+  var VueHighlightWords = {
     functional: true,
     props: {
       activeClassName: String,
@@ -498,7 +498,30 @@
     }
   };
 
-  exports.default = index$1;
+  function install(Vue) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    Vue.component(options.name || 'VueHighlightWords', VueHighlightWords);
+  }
+
+  {
+    var GlobalVue = null;
+
+    if (typeof window !== 'undefined') {
+      GlobalVue = window.Vue;
+    } else if (typeof global !== 'undefined') {
+      GlobalVue = global.Vue;
+    }
+
+    if (GlobalVue) {
+      GlobalVue.use({
+        install: install
+      });
+    }
+  }
+
+  exports.default = VueHighlightWords;
+  exports.install = install;
+  exports.VueHighlightWords = VueHighlightWords;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
