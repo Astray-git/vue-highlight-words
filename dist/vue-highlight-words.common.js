@@ -50,7 +50,7 @@ function _objectSpread(target) {
   return target;
 }
 
-var index = {
+var VueHighlightWords = {
   functional: true,
   props: {
     activeClassName: String,
@@ -155,5 +155,12 @@ var index = {
   }
 };
 
-exports.default = index;
+function install(Vue) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  Vue.component(options.name || 'VueHighlightWords', VueHighlightWords);
+}
+
+exports.default = VueHighlightWords;
+exports.install = install;
+exports.VueHighlightWords = VueHighlightWords;
 //# sourceMappingURL=vue-highlight-words.common.js.map

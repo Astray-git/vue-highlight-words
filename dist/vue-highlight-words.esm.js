@@ -46,7 +46,7 @@ function _objectSpread(target) {
   return target;
 }
 
-var index = {
+var VueHighlightWords = {
   functional: true,
   props: {
     activeClassName: String,
@@ -151,5 +151,11 @@ var index = {
   }
 };
 
-export default index;
+function install(Vue) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  Vue.component(options.name || 'VueHighlightWords', VueHighlightWords);
+}
+
+export default VueHighlightWords;
+export { install, VueHighlightWords };
 //# sourceMappingURL=vue-highlight-words.esm.js.map
