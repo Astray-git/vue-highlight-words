@@ -48,7 +48,7 @@
     "eslint": "^5.13.0",
     "eslint-plugin-vue": "^5.0.0",
     "gh-pages": "^2.0.0",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.1.2",
     "rollup-plugin-analyzer": "^3.0.0",
