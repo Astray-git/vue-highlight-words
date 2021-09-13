@@ -1,5 +1,7 @@
 # vue-highlight-words
 
+:information_source: This is the branch for vue-highlight-words 2 (For Vue 3). If you are looking for Vue 2.0 support, [please check out `1.0` branch](https://github.com/Astray-git/vue-highlight-words/tree/1.0)
+
 > A simple port from [`react-highlight-words`](https://github.com/bvaughn/react-highlight-words)
 >
 > Vue component to highlight words within a larger body of text.
@@ -71,20 +73,37 @@ And the `Highlighter` will mark all occurrences of search terms within the text:
 | findChunks           | Function            |           | Use a custom function to search for matching chunks. This makes it possible to use arbitrary logic when looking for matches. See the default `findChunks` function in [highlight-words-core](https://github.com/bvaughn/highlight-words-core) for signature. Have a look at the [custom findChunks example](https://codesandbox.io/s/k20x3ox31o) on how to use it. |
 | highlightClassName   | String              |           | CSS class name applied to highlighted text                                                                                                                                                                                                                                                                                                                         |
 | highlightStyle       | Object              |           | Inline styles applied to highlighted text                                                                                                                                                                                                                                                                                                                          |
-| highlightTag         | String \| Component |           | Type of tag to wrap around highlighted matches; defaults to `mark` but can also be a component                                                                                                                                                                                                                                                                     |
 | sanitize             | Function            |           | Process each search word and text to highlight before comparing (eg remove accents); signature `(text: string): string`                                                                                                                                                                                                                                            |
 | searchWords          | Array<String>       |     ✓     | Array of search words. The search terms are treated as RegExps unless `autoEscape` is set.                                                                                                                                                                                                                                                                         |
 | textToHighlight      | String              |     ✓     | Text to highlight matches in                                                                                                                                                                                                                                                                                                                                       |
-| unhighlightClassName | String              |           | CSS class name applied to unhighlighted text                                                                                                                                                                                                                                                                                                                       |
-| unhighlightStyle     | Object              |           | Inline styles applied to unhighlighted text                                                                                                                                                                                                                                                                                                                        |
+| custom | Boolean              |           | Whether `<Highlighter>` should not wrap its content in an `<span>` element. Useful when using v-slot to create a custom Highlighter.|
 
-## Custom highlight tag
+## Custom render with v-slot
 
-You can custom the highlight tag by providing a compoent to the `highlightTag` prop. The component should have a `<slot>` for children, then either accept props:
+Use a default slot with `v-slot` props
 
-| Props          | Type   | Description           |
-| :------------- | :----- | :-------------------- |
-| highlightIndex | Number | Index of matched text |
+```ts
+type SlotProps = HighlighterItem[]
+
+type HighlighterItem = {
+  text: string // chunk of text to render
+  attrs: HighlightAttrs
+  chunk: Chunk
+}
+
+type HighlightAttrs = {
+  class: string // class for highlight tag: highlightClassNames
+  key: number // index of the chunk
+  style: Partial<CSSStyleDeclaration> // highlightStyles
+  highlightIndex: number // index of highlight tag
+}
+
+type Chunk = {
+  start: number
+  end: number
+  highlight: boolean
+}
+```
 
 <details>
 <summary>For example: </summary>
@@ -95,76 +114,23 @@ You can custom the highlight tag by providing a compoent to the `highlightTag` p
       // attrs on component are applied to the wrapper `<span>`
       <Highlighter class="my-highlight" :style="{ color: 'red' }"
         highlightClassName="highlight"
-+       :highlightTag="tag"
-        :searchWords="keywords"
-        :autoEscape="true"
-        :textToHighlight="text"/>
-    </div>
-  </template>
-
-  <script>
-  import Highlighter from 'vue-highlight-words'
-
-+ const Highlight = {
-+   template: '<strong><slot></slot> ({{ highlightIndex }}) </strong>',
-+   props: ['highlightIndex']
-+ }
-
-  export default {
-    name: 'app',
-    components: {
-      Highlighter
-    },
-    data() {
-      return {
-        text: 'The dog is chasing the cat. Or perhaps they\'re just playing?',
-        words: 'and or the'，
-+       tag: Highlight
-      }
-    },
-    computed: {
-      keywords() {
-        return this.words.split(' ')
-      }
-    }
-  }
-  </script>
-```
-
-</details>
-
-or use scoped slot:
-
-| Name    | Description                                    | DefaultContent |
-| :------ | :--------------------------------------------- | :------------- |
-| default | slot with prop `highlightIndex` and `children` | Matched text   |
-
-<details>
-<summary>2.6.0+ scoped slot example: </summary>
-
-```diff
-  <template>
-    <div id="app">
-      // attrs on component are applied to the wrapper `<span>`
-      <Highlighter class="my-highlight" :style="{ color: 'red' }"
-        highlightClassName="highlight"
-+       highlightTag="strong"
         :searchWords="keywords"
         :autoEscape="true"
 -       :textToHighlight="text"/>
 +       :textToHighlight="text"
-+       v-slot="{ highlightIndex, children }">
-+       {{children}} ({{highlightIndex}})
++       custom
++       v-slot="items">
++       <div>
++         <span v-for="{chunk, text, attrs} in items" :key="attrs.key"
++           :class="{chunk.highlight: 'highlight' : ''}"
++         >{{text}}</span>
++       </div>
 +     </Highlighter>
     </div>
   </template>
 
   <script>
   import Highlighter from 'vue-highlight-words'
-
-+ const Highlight = {
-+   template: '<strong><slot></slot></strong>',
-+ }
 
   export default {
     name: 'app',
@@ -175,59 +141,6 @@ or use scoped slot:
       return {
         text: 'The dog is chasing the cat. Or perhaps they\'re just playing?',
         words: 'and or the'，
-+       tag: Highlight
-      }
-    },
-    computed: {
-      keywords() {
-        return this.words.split(' ')
-      }
-    }
-  }
-  </script>
-```
-
-</details>
-
-
-<details>
-<summary>Deprecated <code>slot-scope</code> example: </summary>
-
-```diff
-  <template>
-    <div id="app">
-      // attrs on component are applied to the wrapper `<span>`
-      <Highlighter class="my-highlight" :style="{ color: 'red' }"
-        highlightClassName="highlight"
-+       :highlightTag="tag"
-        :searchWords="keywords"
-        :autoEscape="true"
--       :textToHighlight="text"/>
-+       :textToHighlight="text">
-+       <span slot-scope="{ highlightIndex, children }">
-+         {{children}} ({{highlightIndex}})
-+       </span>
-+     </Highlighter>
-    </div>
-  </template>
-
-  <script>
-  import Highlighter from 'vue-highlight-words'
-
-+ const Highlight = {
-+   template: '<strong><slot></slot></strong>',
-+ }
-
-  export default {
-    name: 'app',
-    components: {
-      Highlighter
-    },
-    data() {
-      return {
-        text: 'The dog is chasing the cat. Or perhaps they\'re just playing?',
-        words: 'and or the'，
-+       tag: Highlight
       }
     },
     computed: {

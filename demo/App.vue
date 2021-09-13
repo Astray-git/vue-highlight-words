@@ -11,10 +11,7 @@
     </div>
     <div class="output">
       <h3>Output:</h3>
-      <h4>
-        plain html
-        <code>&lt;i&gt;</code>
-      </h4>
+      <h4>default</h4>
       <HighlightWords
         class="wrapper"
         highlightClassName="highlight"
@@ -22,58 +19,41 @@
         :searchWords="keywords"
         :autoEscape="true"
         :textToHighlight="text"
-      ></HighlightWords>
+      />
 
-      <h4>
-        component
-        <code>highlightTag</code>
-      </h4>
+      <h4>custom render with slot</h4>
       <HighlightWords
-        class="wrapper"
         highlightClassName="highlight"
-        :highlightTag="strongProps"
         :searchWords="keywords"
         :autoEscape="true"
         :textToHighlight="text"
-      ></HighlightWords>
-
-      <h4>
-        component
-        <code>highlightTag</code> with
-        <code>slot-scope</code>
-      </h4>
-      <HighlightWords
-        class="wrapper"
-        highlightClassName="highlight"
-        :highlightTag="strongSlot"
-        :searchWords="keywords"
-        :autoEscape="true"
-        :textToHighlight="text"
+        custom
+        v-slot="items"
       >
-        <span slot-scope="{ highlightIndex, children }">
-          <small>[{{ highlightIndex }}]:</small>
-          {{ children }}
+        <span>
+          <template v-for="{ chunk, text, attrs } in items">
+            <StrongProps
+              v-if="chunk.highlight"
+              v-bind="attrs"
+              :key="attrs.key"
+              >{{ text }}</StrongProps
+            >
+            <template v-else>{{ text }}</template>
+          </template>
         </span>
       </HighlightWords>
 
-      <h4><code>&lt;strong&gt;</code> tag with 2.6.0+ scoped slot</h4>
-      <HighlightWords
-        class="wrapper"
-        highlightClassName="highlight"
-        highlightTag="strong"
-        :searchWords="keywords"
-        :autoEscape="true"
-        :textToHighlight="text"
-        v-slot="{ highlightIndex, children }"
-      >
-        <small>[{{ highlightIndex }}]:</small>
-        {{ children }}
-      </HighlightWords>
+      <p>
+        <a
+          href="https://github.com/Astray-git/vue-highlight-words/blob/1.0/demo/App.vue"
+          >View demo code</a
+        >
+      </p>
     </div>
 
     <a href="https://github.com/Astray-git/vue-highlight-words">
       <img
-        style="position: absolute; top: 0; right: 0; border: 0;"
+        style="position: absolute; top: 0; right: 0; border: 0"
         src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
         alt="Fork me on GitHub"
       />
@@ -84,26 +64,24 @@
 <script>
 import HighlightWords from 'vue-highlight-words'
 import StrongProps from './components/StrongProps'
-import StrongSlot from './components/StrongSlot'
 
 export default {
   name: 'app',
   components: {
-    HighlightWords
+    HighlightWords,
+    StrongProps,
   },
   data() {
     return {
       text: 'The dog is chasing the cat. Or perhaps they are just playing?',
       words: 'and or the',
-      strongProps: StrongProps,
-      strongSlot: StrongSlot
     }
   },
   computed: {
     keywords() {
       return this.words.split(' ')
-    }
-  }
+    },
+  },
 }
 </script>
 
