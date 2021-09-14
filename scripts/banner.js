@@ -1,12 +1,7 @@
-module.exports = version => `
+module.exports = (version) => `
 /*!
- * vue-highlight-words © Yichang Liu, ${new Date().getFullYear()}
- *
- * Version: ${version}
- *
+ * vue-highlight-words  v${version}
+ * © ${new Date().getFullYear()} Yichang Liu
  * LICENCE: MIT
- *
- * https://github.com/Astray-git/vue-highlight-words
- *
 */
 `
