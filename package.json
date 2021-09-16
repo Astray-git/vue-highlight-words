@@ -14,14 +14,14 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "npm run build:demo && npm run build:dist",
+    "prebuild": "pnpm run lint",
+    "build": "pnpm run build:demo && pnpm run build:dist",
     "build:demo": "vue-cli-service build --dest dist-demo",
     "build:dist": "cross-env BUILD_LIB=1 node ./scripts/build",
     "lint": "vue-cli-service lint",
     "deploy": "gh-pages -d dist-demo",
-    "prebuild": "npm run lint",
-    "postpublish": "npm run deploy",
-    "prepublishOnly": "npm run build:dist"
+    "postpublish": "pnpm run deploy",
+    "release": "bumpp --tag --commit --push"
   },
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "@vue/compiler-sfc": "3.1.5",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
+    "bumpp": "^7.1.1",
     "chalk": "^2.4.2",
     "clone-deep": "^4.0.1",
     "core-js": "^3.17.3",
