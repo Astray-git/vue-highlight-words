@@ -9,14 +9,14 @@ module.exports = {
     process.env.NODE_ENV === 'production' ? '/vue-highlight-words/' : '/',
   pages: {
     index: {
-      entry: 'demo/main.js'
-    }
+      entry: 'demo/main.js',
+    },
   },
   configureWebpack: {
     resolve: {
       alias: {
-        'vue-highlight-words': resolve('/src/index.js')
-      }
-    }
-  }
+        'vue-highlight-words': resolve('/src/index.js'),
+      },
+    },
+  },
 }

@@ -7,6 +7,6 @@
 
 <script>
 export default {
-  props: ['highlightIndex']
+  props: ['highlightIndex'],
 }
 </script>
