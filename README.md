@@ -76,7 +76,6 @@ And the `Highlighter` will mark all occurrences of search terms within the text:
 | sanitize             | Function            |           | Process each search word and text to highlight before comparing (eg remove accents); signature `(text: string): string`                                                                                                                                                                                                                                            |
 | searchWords          | Array<String>       |     ✓     | Array of search words. The search terms are treated as RegExps unless `autoEscape` is set.                                                                                                                                                                                                                                                                         |
 | textToHighlight      | String              |     ✓     | Text to highlight matches in                                                                                                                                                                                                                                                                                                                                       |
-| custom | Boolean              |           | Whether `<Highlighter>` should not wrap its content in an `<span>` element. Useful when using v-slot to create a custom Highlighter.|
 
 ## Custom render with v-slot
 
@@ -118,7 +117,6 @@ type Chunk = {
         :autoEscape="true"
 -       :textToHighlight="text"/>
 +       :textToHighlight="text"
-+       custom
 +       v-slot="items">
 +       <div>
 +         <span v-for="{chunk, text, attrs} in items" :key="attrs.key"
@@ -163,19 +161,19 @@ pnpm install
 ### Compiles and hot-reloads for development
 
 ```
-pnpm run serve
+pnpm dev
 ```
 
 ### Compiles and minifies for production
 
 ```
-pnpm run build
+pnpm build
 ```
 
 ### Lints and fixes files
 
 ```
-pnpm run lint
+pnpm lint
 ```
 
 ## License
