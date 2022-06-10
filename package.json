@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "Vue component to highlight words within a larger body of text",
   "sideEffects": false,
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "main": "dist/vue-highlight-words.cjs",
   "module": "dist/vue-highlight-words.esm.js",
   "jsdelivr": "dist/vue-highlight-words.global.js",

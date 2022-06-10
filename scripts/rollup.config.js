@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   input: {
     external: ['vue', 'highlight-words-core'],
-    input: path.join(__dirname, '../src/index.js'),
+    input: path.join(__dirname, '../src/index.ts'),
   },
   output: {
     banner: require('./banner.js')(version),
