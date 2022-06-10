@@ -61,9 +61,9 @@
   </div>
 </template>
 
-<script>
-import HighlightWords from 'vue-highlight-words'
-import StrongProps from './components/StrongProps'
+<script lang="ts">
+import HighlightWords from '../src'
+import StrongProps from './components/StrongProps.vue'
 
 export default {
   name: 'app',

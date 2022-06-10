@@ -1,7 +1,44 @@
-import { h } from 'vue'
+import type { Chunk, FindChunksArgs } from 'highlight-words-core'
 import { findAll } from 'highlight-words-core'
+import type {
+  AllowedComponentProps,
+  ComponentCustomProps,
+  SetupContext,
+  VNode,
+  VNodeProps,
+} from 'vue'
+import { h } from 'vue'
 
-const VueHighlightWords = (props, context) => {
+export interface VueHighlightWordsProps {
+  activeClassName?: string
+  activeIndex?: number
+  activeStyle?: Partial<CSSStyleDeclaration>
+  autoEscape?: boolean
+  caseSensitive?: boolean
+  findChunks?: (args: FindChunksArgs) => Chunk[]
+  custom?: boolean
+  highlightClassName?: string
+  highlightStyle?: Partial<CSSStyleDeclaration>
+  sanitize?: (text: string) => string
+  searchWords: string[]
+  textToHighlight: string
+}
+
+export interface TextChunk {
+  chunk: Chunk
+  text: string
+  attrs?: {
+    class: string
+    key: number
+    highlightIndex: number
+    style: Partial<CSSStyleDeclaration>
+  }
+}
+
+const VueHighlightWordsImpl = (
+  props: Readonly<VueHighlightWordsProps>,
+  context: Omit<SetupContext, 'expose'>
+) => {
   const chunks = findAll({
     autoEscape: props.autoEscape,
     caseSensitive: props.caseSensitive,
@@ -11,21 +48,17 @@ const VueHighlightWords = (props, context) => {
     textToHighlight: props.textToHighlight,
   })
 
-  if (props.custom) {
-    const slots = context.slots
-    const textArr = getTextChildren(props, chunks, (chunk, text, attrs) => {
-      return {
-        chunk,
-        text,
-        attrs,
-      }
-    })
-    return slots.default && slots.default(textArr)
+  const children = getTextChildren(props, chunks)
+
+  const slots = context.slots
+  if (slots.default) {
+    return slots.default && slots.default(children)
   }
+
   return h(
     'span',
     { ...context.attrs },
-    getTextChildren(props, chunks, (chunk, text, attrs) => {
+    children.map(({ chunk, text, attrs }) => {
       if (!chunk.highlight) {
         return text
       }
@@ -36,7 +69,7 @@ const VueHighlightWords = (props, context) => {
 
 const EMPTY_STYLE = {}
 
-function getTextChildren(props, chunks, callbackFn) {
+function getTextChildren(props: VueHighlightWordsProps, chunks: Chunk[]) {
   let highlightCount = -1
   let highlightClassNames = ''
   let highlightStyles = {}
@@ -52,7 +85,7 @@ function getTextChildren(props, chunks, callbackFn) {
   return chunks.map((chunk, index) => {
     const text = textToHighlight.substr(chunk.start, chunk.end - chunk.start)
     if (!chunk.highlight) {
-      return callbackFn(chunk, text)
+      return { chunk, text }
     } else {
       highlightCount++ // start at 0
 
@@ -72,12 +105,12 @@ function getTextChildren(props, chunks, callbackFn) {
         style: highlightStyles,
         highlightIndex: highlightCount,
       }
-      return callbackFn(chunk, text, attrs)
+      return { chunk, text, attrs }
     }
   })
 }
 
-VueHighlightWords.props = {
+VueHighlightWordsImpl.props = {
   activeClassName: String,
   activeIndex: Number,
   activeStyle: Object,
@@ -95,8 +128,8 @@ VueHighlightWords.props = {
   highlightStyle: Object,
   sanitize: Function,
   searchWords: {
-    type: Array, // Array<string>
-    validator(value) {
+    type: Array, // string[]
+    validator(value: string[]) {
       return value.every((word) => typeof word === 'string')
     },
     required: true,
@@ -107,4 +140,15 @@ VueHighlightWords.props = {
   },
 }
 
-export default VueHighlightWords
+export const VueHighlightWords = VueHighlightWordsImpl as unknown as {
+  new (): {
+    $props: AllowedComponentProps &
+      ComponentCustomProps &
+      VNodeProps &
+      VueHighlightWordsProps
+
+    $slots: {
+      default: (arg: TextChunk[]) => VNode[]
+    }
+  }
+}

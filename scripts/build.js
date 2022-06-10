@@ -1,6 +1,6 @@
 const path = require('path')
 const rollup = require('rollup')
-const babel = require('@rollup/plugin-babel').babel
+const ts = require('rollup-plugin-typescript2')
 const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve
 const commonjs = require('@rollup/plugin-commonjs')
 const replace = require('@rollup/plugin-replace')
@@ -13,6 +13,20 @@ const rimraf = require('rimraf')
 const pkg = require('../package.json')
 const config = require('./rollup.config')
 
+function getTsPlugin(shouldCheck = false) {
+  return ts({
+    check: shouldCheck,
+    cacheRoot: path.resolve(__dirname, '../node_modules/.rts2_cache'),
+    tsconfigOverride: {
+      compilerOptions: {
+        sourceMap: true,
+        declaration: shouldCheck,
+        declarationMap: shouldCheck,
+      },
+    },
+  })
+}
+
 const plugins = [
   replace({
     preventAssignment: true,
@@ -21,10 +35,6 @@ const plugins = [
   }),
   nodeResolve(),
   commonjs(),
-  babel({
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.es6', '.es', '.mjs'],
-    babelHelpers: 'bundled',
-  }),
   analyzer({
     limit: 0,
     hideDeps: true,
@@ -39,7 +49,7 @@ const filename = (str) => path.join(__dirname, '../', str)
 const builds = {
   cjs: {
     input: {
-      plugins,
+      plugins: [getTsPlugin(true), ...plugins],
     },
     output: {
       file: filename(pkg.main),
@@ -50,7 +60,7 @@ const builds = {
   iife: {
     input: {
       external: ['vue'],
-      plugins,
+      plugins: [getTsPlugin(), ...plugins],
     },
     output: {
       file: filename(pkg.unpkg),
@@ -62,7 +72,7 @@ const builds = {
   iife_min: {
     input: {
       external: ['vue'],
-      plugins: plugins.concat([terser()]),
+      plugins: [getTsPlugin(), ...plugins, terser()],
     },
     output: {
       file: filename(pkg.unpkg.replace('.js', '.min.js')),
@@ -73,7 +83,7 @@ const builds = {
   },
   esm: {
     input: {
-      plugins,
+      plugins: [getTsPlugin(), ...plugins],
     },
     output: {
       file: filename(pkg.module),
@@ -82,7 +92,7 @@ const builds = {
   },
   esm_min: {
     input: {
-      plugins: plugins.concat([terser()]),
+      plugins: [getTsPlugin(), ...plugins, terser()],
     },
     output: {
       file: filename(pkg.module.replace('.js', '.min.js')),
