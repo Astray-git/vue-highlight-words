@@ -117,7 +117,7 @@ VueHighlightWordsImpl.props = {
   autoEscape: Boolean,
   caseSensitive: {
     type: Boolean,
-    defualt: false,
+    default: false,
   },
   findChunks: Function,
   custom: {
